@@ -1,0 +1,2 @@
+# RubberDucky
+Information Gatherin MSWindows
